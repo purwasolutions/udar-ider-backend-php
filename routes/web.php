@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/key', function() {
+$router->get('/key', function () {
     return \Illuminate\Support\Str::random(32);
 });
 
@@ -39,4 +39,8 @@ $router->group(['prefix' => 'admin', 'namespace' => 'Admin'], function () use ($
     });
 });
 
-$router->post('/users', 'UserController@register');
+$router->post('/user', 'UserController@register');
+$router->group(['prefix' => 'user', 'middleware' => 'firebase'], function () use ($router) {
+    $router->get('/', 'UserController@currentUser');    
+    $router->put('/', 'UserController@update');
+});

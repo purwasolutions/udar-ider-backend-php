@@ -26,4 +26,25 @@ class UserController extends Controller
 
         return $user;
     }
+
+    public function currentUser(Request $request)
+    {
+        $uid = $request->user->uid;
+        return User::with('role')->where('uid', $uid)->first();
+    }
+
+    public function update(Request $request)
+    {
+        $input = $request->json();
+
+        $user = User::where('uid', $request->user->uid)->first();
+
+        $user->name = $input->get('name', $user->name);
+        $user->email = $input->get('email', $user->email);
+        $user->phone_number = $request->get('phone_number', $user->phone_number);
+
+        $user->save();
+
+        return $user;
+    }
 }
